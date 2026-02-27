@@ -17,7 +17,7 @@
 
 <br/>
 
-![MouseClickerImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/MouseClicker.png)<sup>___&emsp;此为展示图片，并非可运行的程序界面___</sup>
+![MouseClickerImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/MouseClicker.png1)<sup>___&emsp;此为展示图片，并非可运行的程序界面___</sup>
 
 ### __功能__
 - [x] __支持常规鼠标按键点击（左键/中键/右键）__
