@@ -1,0 +1,16 @@
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.csproj.AssemblyReference.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MainWindow.g.cs
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\App.g.cs
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker_MarkupCompile.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker_MarkupCompile.lref
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\bin\Debug\MouseClicker.exe.config
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\bin\Debug\MouseClicker.exe
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\bin\Debug\MouseClicker.pdb
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\App.baml
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MainWindow.baml
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.g.resources
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.Properties.Resources.resources
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.csproj.GenerateResource.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.csproj.CoreCompileInputs.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.exe
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Debug\MouseClicker.pdb

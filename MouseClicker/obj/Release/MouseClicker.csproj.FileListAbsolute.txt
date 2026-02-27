@@ -1,0 +1,16 @@
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\bin\Release\MouseClicker.exe.config
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\bin\Release\MouseClicker.exe
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\bin\Release\MouseClicker.pdb
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.csproj.AssemblyReference.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MainWindow.g.cs
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\App.g.cs
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker_MarkupCompile.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker_MarkupCompile.lref
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\App.baml
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MainWindow.baml
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.g.resources
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.Properties.Resources.resources
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.csproj.GenerateResource.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.csproj.CoreCompileInputs.cache
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.exe
+C:\FeiLingshu\Desktop\MouseClicker\MouseClicker\obj\Release\MouseClicker.pdb
