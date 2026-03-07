@@ -174,6 +174,7 @@ namespace MouseClicker
                 if (cb == Move)
                 {
                     this.MoveSTD.Foreground = new SolidColorBrush(Color.FromArgb(0xFF, 0xC0, 0xC0, 0xC0));
+                    this.MovePlus.IsHitTestVisible = true;
                 }
                 if (cb == MovePlus)
                 {
@@ -198,6 +199,7 @@ namespace MouseClicker
                     {
                         this.MovePlus.IsChecked = false;
                     }
+                    this.MovePlus.IsHitTestVisible = false;
                 }
                 if (cb == MovePlus)
                 {
