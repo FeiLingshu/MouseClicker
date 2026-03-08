@@ -35,6 +35,9 @@
 > __请注意：在 `Win11` 系统中，若最小化程序窗口，将自动丢失高精度计时器配置，以下说明来自 `MSDN`__
 > - __["从Windows 11开始，如果拥有窗口的进程完全被遮挡、最小化或最终用户看不见或听不见，Windows 不保证比默认系统分辨率更高的分辨率。"](https://learn.microsoft.com/zh-cn/windows/win32/api/timeapi/nf-timeapi-timebeginperiod#remarks)__
 
+- __程序现已支持本地配置文件__
+|__![PopupImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/Popup.png)__|__选项在窗口标题栏右键菜单中可见！！！__<br/>- [x] __可配置是否保存窗口位置__<br/>- [x] __可配置是否保存用户设置__|
+
 > [!NOTE]
 > __程序需要 [`.Net Framework 4.8`](https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/net48) 运行环境__
 > - __如需自行编译，请下载「 生成应用 - 开发包 」列下的内容__
