@@ -37,7 +37,7 @@
 
 - __程序现已支持本地配置文件__
 
-|__![PopupImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/Popup.png)__|__选项在窗口标题栏右键菜单中可见！！！__<br/>- __可配置是否保存窗口位置__<br/>- __可配置是否保存用户设置__|
+|__![PopupImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/Popup.png)__|__选项在窗口标题栏右键菜单中可见！！！__<br/>__-\> 可配置是否保存窗口位置__<br/>__-\> 可配置是否保存用户设置__|
 |:--------:|:----------------|
 
 > [!NOTE]
