@@ -81,6 +81,12 @@ namespace MouseClicker
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void Exception_throw(Exception e)
         {
+            Thread t = new Thread(() =>
+            {
+                window?.SafeUnhook();
+            })
+            { IsBackground = true };
+            t.Start();
             string estd =
                 $"[应用程序内部异常] [{DateTime.Now:yyyy/MM/dd HH:mm:ss}]"
                 + $"\n\n根命名空间:{e.Source}"

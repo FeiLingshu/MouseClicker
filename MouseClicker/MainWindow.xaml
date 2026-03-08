@@ -148,11 +148,132 @@
                     </EventTrigger>
                 </Border.Triggers>
             </Border>
+            <Grid.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.Resources>
+                        <Style TargetType="ContextMenu">
+                            <Setter Property="OverridesDefaultStyle" Value="True"/>
+                            <Setter Property="Background" Value="#FF202020"/>
+                            <Setter Property="Foreground" Value="#FFC0C0C0"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="BorderBrush" Value="#FF404040"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ContextMenu">
+                                        <Border Margin="0" Background="Transparent">
+                                            <Border 
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="5"
+                                                Padding="3"
+                                                Margin="5">
+                                                <ItemsPresenter/>
+                                                <Border.Effect>
+                                                    <DropShadowEffect
+                                                        BlurRadius="8"
+                                                        Color="#FF000000"
+                                                        Direction="270"
+                                                        Opacity="0.8"
+                                                        RenderingBias="Performance"
+                                                        ShadowDepth="1"/>
+                                                </Border.Effect>
+                                            </Border>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Foreground" Value="#FFC0C0C0"/>
+                            <Setter Property="Background" Value="#FF202020"/>
+                            <Setter Property="FontFamily" Value="Consolas, Microsoft YaHei"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="UseLayoutRounding" Value="True"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="MenuItem">
+                                        <Border 
+                                            Background="{TemplateBinding Background}"
+                                            Padding="5,3"
+                                            CornerRadius="5">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ContentPresenter
+                                                    ContentSource="Icon"
+                                                    Width="10"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,0,5,0"/>
+                                                <ContentPresenter
+                                                    ContentSource="Header"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FF303030"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style TargetType="Separator">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle
+                                            Height="1"
+                                            Fill="#FF303030"
+                                            HorizontalAlignment="Stretch"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ContextMenu.Resources>
+                    <MenuItem
+                        Header="保存窗口位置"
+                        IsCheckable="True"
+                        IsChecked="False"
+                        x:Name="Setting_1">
+                        <MenuItem.Icon>
+                            <Path
+                                Data="M 1,5 L 4,8 L 9,1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stroke="Transparent"
+                                StrokeThickness="1"
+                                IsHitTestVisible="False"
+                                x:Name="SettingIcon_1"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        Header="保存配置参数"
+                        IsCheckable="True"
+                        IsChecked="False"
+                        x:Name="Setting_2">
+                        <MenuItem.Icon>
+                            <Path
+                                Data="M 1,5 L 4,8 L 9,1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stroke="Transparent"
+                                StrokeThickness="1"
+                                IsHitTestVisible="False"
+                                x:Name="SettingIcon_2"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </Grid.ContextMenu>
         </Grid>
         <Grid
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            Margin="0,35,0,45">
+            Margin="0,35,0,45"
+            x:Name="MainArea">
             <Grid
                 Height="20"
                 HorizontalAlignment="Stretch"

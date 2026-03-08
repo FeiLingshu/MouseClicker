@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -7,8 +8,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using static MouseClicker.API;
+using Screen = System.Windows.Forms.Screen;
 using SystemInformation = System.Windows.Forms.SystemInformation;
 using WinFormRect = System.Drawing.Rectangle;
 
@@ -24,23 +27,25 @@ namespace MouseClicker
             InitializeComponent();
             this.TITLE.MouseLeftButtonDown += (s, e) =>
             {
-                DependencyObject originalSource = e.OriginalSource as DependencyObject;
-                if (originalSource is Border border)
-                {
-                    if (border == CLOSE || border == MINI)
-                    {
-                        return;
-                    }
-                }
                 this.DragMove();
             };
-            this.CLOSE.MouseLeftButtonUp += (s, e) =>
+            this.CLOSE.PreviewMouseDown += (s, e) =>
             {
-                this.Close();
+                e.Handled = true;
             };
-            this.MINI.MouseLeftButtonUp += (s, e) =>
+            this.MINI.PreviewMouseDown += (s, e) =>
             {
-                this.WindowState = WindowState.Minimized;
+                e.Handled = true;
+            };
+            this.CLOSE.PreviewMouseUp += (s, e) =>
+            {
+                if (e.ChangedButton == MouseButton.Left) this.Close();
+                e.Handled = true;
+            };
+            this.MINI.PreviewMouseUp += (s, e) =>
+            {
+                if (e.ChangedButton == MouseButton.Left) this.WindowState = WindowState.Minimized;
+                e.Handled = true;
             };
             this.Type1.Checked += Type_Checked;
             this.Type2.Checked += Type_Checked;
@@ -58,7 +63,6 @@ namespace MouseClicker
             this.Time.TextChanged += Time_TextChanged;
             this.Get.MouseLeftButtonUp += Get_MouseLeftButtonUp;
             this.Button.MouseLeftButtonUp += Button_MouseLeftButtonUp;
-
             this.ContentRendered += (s, e) =>
             {
                 T = new Thread(Run) { IsBackground = true };
@@ -76,19 +80,114 @@ namespace MouseClicker
             };
             this.Closing += (s, e) =>
             {
-                if (!UnhookWindowsHookEx((int)KeyHook))
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error(),
-                            $"挂接全局HOOK挂钩过程中出现Win32异常({Marshal.GetLastWin32Error().ToString().PadLeft(4, '0')})。");
-                    });
-                }
+                SafeUnhook();
                 if (T != null && T.IsAlive)
                 {
                     T.Abort();
                 }
             };
+            this.Loaded += (s, e) =>
+            {
+                Settings.CheckFile(this);
+                this.Setting_1.Checked += (ss, ee) =>
+                {
+                    SettingIcon_1.Stroke = new SolidColorBrush(Color.FromArgb(0xFF, 0xC0, 0xC0, 0xC0));
+                    Settings.SaveData(
+                        Settings.Dataindex.WindowFlag,
+                        Settings.GetBytes(typeof(bool), true));
+                };
+                this.Setting_1.Unchecked += (ss, ee) =>
+                {
+                    SettingIcon_1.Stroke = new SolidColorBrush(Colors.Transparent);
+                    Settings.SaveData(
+                        Settings.Dataindex.WindowFlag,
+                        Settings.GetBytes(typeof(bool), false));
+                };
+                this.Setting_2.Checked += (ss, ee) =>
+                {
+                    SettingIcon_2.Stroke = new SolidColorBrush(Color.FromArgb(0xFF, 0xC0, 0xC0, 0xC0));
+                    Settings.SaveData(
+                        Settings.Dataindex.SettingFlag,
+                        Settings.GetBytes(typeof(bool), true));
+                };
+                this.Setting_2.Unchecked += (ss, ee) =>
+                {
+                    SettingIcon_2.Stroke = new SolidColorBrush(Colors.Transparent);
+                    Settings.SaveData(
+                        Settings.Dataindex.SettingFlag,
+                        Settings.GetBytes(typeof(bool), false));
+                };
+                this.Closing += (ss, ee) =>
+                {
+                    if (this.Setting_1.IsChecked)
+                    {
+                        Settings.SaveData(
+                            Settings.Dataindex.WindowData,
+                            Settings.GetBytes(typeof(Point), new Point(this.Left, this.Top)));
+                    }
+                    if (this.Setting_2.IsChecked)
+                    {
+                        List<byte> list = new List<byte>();
+                        list.AddRange(Settings.GetBytes(typeof(int), (int)TypeInfo));
+                        list.AddRange(Settings.GetBytes(typeof(int), TimeInfo));
+                        list.AddRange(Settings.GetBytes(typeof(bool), this.Delay.IsChecked.HasValue && this.Delay.IsChecked.Value));
+                        list.AddRange(Settings.GetBytes(typeof(bool), this.Move.IsChecked.HasValue && this.Move.IsChecked.Value));
+                        list.AddRange(Settings.GetBytes(typeof(Point), this.MousePoint));
+                        list.AddRange(Settings.GetBytes(typeof(bool), this.MovePlus.IsChecked.HasValue && this.MovePlus.IsChecked.Value));
+                        Settings.SaveData(
+                            Settings.Dataindex.AllData,
+                            list.ToArray());
+                    }
+                    Settings.Dispose();
+                };
+            };
+        }
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            var source = PresentationSource.FromVisual(this) as HwndSource;
+            source?.AddHook(WndProc);
+        }
+
+        private const int WM_EXITSIZEMOVE = 0x0232;
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            switch (msg)
+            {
+                case WM_EXITSIZEMOVE:
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        if (this.IsLoaded)
+                        {
+                            Screen screen = Screen.FromRectangle(
+                                new WinFormRect((int)this.Left, (int)this.Top, (int)this.Width, (int)this.Height));
+                            WinFormRect rect = screen.WorkingArea;
+                            rect.X += 1;
+                            rect.Y += 1;
+                            rect.Width -= (int)this.Width + 2;
+                            rect.Height -= (int)this.Height + 2;
+                            if (this.Left > rect.Right)
+                            {
+                                this.Left = rect.Right;
+                            }
+                            if (this.Left < rect.Left)
+                            {
+                                this.Left = rect.Left;
+                            }
+                            if (this.Top > rect.Bottom)
+                            {
+                                this.Top = rect.Bottom;
+                            }
+                            if (this.Top < rect.Top)
+                            {
+                                this.Top = rect.Top;
+                            }
+                        }
+                    }));
+                    break;
+            }
+            return IntPtr.Zero;
         }
 
         private IntPtr KeyHook;
@@ -107,8 +206,13 @@ namespace MouseClicker
             {
                 if (keyBoardHookStruct == null)
                 {
-                    throw new Win32Exception(Marshal.GetLastWin32Error(),
-                        $"LocalLowHook捕获发生异常。");
+                    Thread t = new Thread(() =>
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(),
+                            $"LocalLowHook捕获发生异常。");
+                    })
+                    { IsBackground = true };
+                    t.Start();
                 }
             }
             if (wParam == WM_SYSKEYDOWN)
@@ -122,6 +226,22 @@ namespace MouseClicker
                 }
             }
             return CallNextHookEx((int)KeyHook, nCode, wParam, lParam);
+        }
+
+        public void SafeUnhook()
+        {
+            if (KeyHook != IntPtr.Zero)
+            {
+                if (!UnhookWindowsHookEx((int)KeyHook))
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        throw new Win32Exception(Marshal.GetLastWin32Error(),
+                            $"挂接全局HOOK挂钩过程中出现Win32异常({Marshal.GetLastWin32Error().ToString().PadLeft(4, '0')})。");
+                    });
+                }
+                KeyHook = IntPtr.Zero;
+            }
         }
 
         private enum TypeEnum : int
@@ -288,7 +408,7 @@ namespace MouseClicker
             }
         }
 
-        private Point MousePoint = new Point(0, 0);
+        public Point MousePoint = new Point(0, 0);
 
         private bool getstate = false;
 
@@ -506,6 +626,7 @@ namespace MouseClicker
                     ReadSet(false);
                     Is_Running = true;
                     this.ButtonSTD.Text = "停止点击（Alt+F1）";
+                    MainArea.IsHitTestVisible = false;
                     RunSign.Set();
                 }
             }
@@ -514,6 +635,7 @@ namespace MouseClicker
         private void ElementSet()
         {
             this.ButtonSTD.Text = "开始点击（Alt+F1）";
+            MainArea.IsHitTestVisible = true;
         }
     }
 
