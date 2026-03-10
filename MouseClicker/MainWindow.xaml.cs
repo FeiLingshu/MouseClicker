@@ -85,6 +85,7 @@ namespace MouseClicker
                 {
                     T.Abort();
                 }
+                if (Is_Running) TimeEndPeriod(1);
             };
             this.Loaded += (s, e) =>
             {
@@ -196,34 +197,46 @@ namespace MouseClicker
 
         private int Win32CallBack(int nCode, int wParam, IntPtr lParam)
         {
-            KeyBoardHookStruct keyBoardHookStruct = new KeyBoardHookStruct();
             try
             {
-                keyBoardHookStruct = (KeyBoardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyBoardHookStruct));
-            }
-            catch (Exception) { }
-            finally
-            {
-                if (keyBoardHookStruct == null)
+                KeyBoardHookStruct keyBoardHookStruct = new KeyBoardHookStruct();
+                try
                 {
-                    Thread t = new Thread(() =>
+                    keyBoardHookStruct = (KeyBoardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyBoardHookStruct));
+                }
+                catch (Exception) { }
+                finally
+                {
+                    if (keyBoardHookStruct == null)
                     {
-                        throw new Win32Exception(Marshal.GetLastWin32Error(),
-                            $"LocalLowHook捕获发生异常。");
-                    })
-                    { IsBackground = true };
-                    t.Start();
+                        Thread t = new Thread(() =>
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error(),
+                                $"LocalLowHook捕获发生异常。");
+                        })
+                        { IsBackground = true };
+                        t.Start();
+                    }
+                }
+                if (wParam == WM_SYSKEYDOWN)
+                {
+                    if (keyBoardHookStruct.vkCode == VK_F1 && (keyBoardHookStruct.flags & LLKHF_ALTDOWN) != 0)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            Button_MouseLeftButtonUp(null, null);
+                        });
+                    }
                 }
             }
-            if (wParam == WM_SYSKEYDOWN)
+            catch (Exception exp)
             {
-                if (keyBoardHookStruct.vkCode == VK_F1 && (keyBoardHookStruct.flags & LLKHF_ALTDOWN) != 0)
+                Thread t = new Thread(() =>
                 {
-                    Dispatcher.Invoke(() =>
-                    {
-                        Button_MouseLeftButtonUp(null, null);
-                    });
-                }
+                    throw exp;
+                })
+                { IsBackground = true };
+                t.Start();
             }
             return CallNextHookEx((int)KeyHook, nCode, wParam, lParam);
         }
@@ -449,9 +462,9 @@ namespace MouseClicker
             this.MouseDown += Flag_B;
         }
 
-        private Thread T = null;
+        public Thread T = null;
 
-        private volatile bool Is_Running = false;
+        public volatile bool Is_Running = false;
 
         private volatile bool Is_Waiting = false;
 

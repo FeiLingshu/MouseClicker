@@ -81,68 +81,75 @@ namespace MouseClicker
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void Exception_throw(Exception e)
         {
-            Thread t = new Thread(() =>
+            try
             {
                 window?.SafeUnhook();
-            })
-            { IsBackground = true };
-            t.Start();
-            string estd =
-                $"[应用程序内部异常] [{DateTime.Now:yyyy/MM/dd HH:mm:ss}]"
-                + $"\n\n根命名空间:{e.Source}"
-                + $"\n方法体:{e.TargetSite}";
-            if (e is AggregateException ae && ae.InnerException != null)
-            {
-                estd +=
-                    $"\nInnerException:{e.InnerException.GetType().Name}"
-                    + $"\n    根命名空间:{e.InnerException.Source}"
-                    + $"\n    方法体:{e.InnerException.TargetSite}"
-                    + $"\n    详细信息:\n        {e.InnerException.Message}"
-                    + $"{(Regex.IsMatch(e.InnerException.Message, @"\n\z") ? string.Empty : "\n")}"
-                    + $"    位置:";
-                if (string.IsNullOrEmpty(e.InnerException.StackTrace)
-                    || !e.InnerException.StackTrace.Contains("\n"))
+                if (window.T != null && window.T.IsAlive)
                 {
-                    estd += $"\n        {e.InnerException.StackTrace.Trim()}";
+                    window.T.Abort();
+                }
+                if (window != null && window.Is_Running) API.TimeEndPeriod(1);
+            }
+            catch (Exception) { }
+            finally
+            {
+                string estd =
+                    $"[应用程序内部异常] [{DateTime.Now:yyyy/MM/dd HH:mm:ss}]"
+                    + $"\n\n根命名空间:{e.Source}"
+                    + $"\n方法体:{e.TargetSite}";
+                if (e is AggregateException ae && ae.InnerException != null)
+                {
+                    estd +=
+                        $"\nInnerException:{e.InnerException.GetType().Name}"
+                        + $"\n    根命名空间:{e.InnerException.Source}"
+                        + $"\n    方法体:{e.InnerException.TargetSite}"
+                        + $"\n    详细信息:\n        {e.InnerException.Message}"
+                        + $"{(Regex.IsMatch(e.InnerException.Message, @"\n\z") ? string.Empty : "\n")}"
+                        + $"    位置:";
+                    if (string.IsNullOrEmpty(e.InnerException.StackTrace)
+                        || !e.InnerException.StackTrace.Contains("\n"))
+                    {
+                        estd += $"\n        {e.InnerException.StackTrace.Trim()}";
+                    }
+                    else
+                    {
+                        foreach (string st in e.InnerException.StackTrace.Split('\n'))
+                        {
+                            estd += $"\n        {st.Trim()}";
+                        }
+                    }
+                    estd += "\n\nMouseClicker - Exceptions Processed By FeiLingshu";
                 }
                 else
                 {
-                    foreach (string st in e.InnerException.StackTrace.Split('\n'))
+                    estd +=
+                        $"\n详细信息:{e.GetType().Name}\n    {e.Message}"
+                        + $"{(Regex.IsMatch(e.Message, @"\n\z") ? string.Empty : "\n")}"
+                        + $"位置:";
+                    if (string.IsNullOrEmpty(e.StackTrace)
+                        || !e.StackTrace.Contains("\n"))
                     {
-                        estd += $"\n        {st.Trim()}";
+                        estd += $"\n    {e.StackTrace.Trim()}";
                     }
-                }
-                estd += "\n\nMHYLAUNCHER_GO V2 - Exceptions Processed By FeiLingshu";
-            }
-            else
-            {
-                estd +=
-                    $"\n详细信息:{e.GetType().Name}\n    {e.Message}"
-                    + $"{(Regex.IsMatch(e.Message, @"\n\z") ? string.Empty : "\n")}"
-                    + $"位置:";
-                if (string.IsNullOrEmpty(e.StackTrace)
-                    || !e.StackTrace.Contains("\n"))
-                {
-                    estd += $"\n    {e.StackTrace.Trim()}";
-                }
-                else
-                {
-                    foreach (string st in e.StackTrace.Split('\n'))
+                    else
                     {
-                        estd += $"\n    {st.Trim()}";
+                        foreach (string st in e.StackTrace.Split('\n'))
+                        {
+                            estd += $"\n    {st.Trim()}";
+                        }
                     }
+                    estd += "\n\nMouseClicker - Exceptions Processed By FeiLingshu";
                 }
-                estd += "\n\nMouseClicker - Exceptions Processed By FeiLingshu";
+                MessageBox.Show(
+                    estd,
+                    "MouseClicker",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error,
+                    MessageBoxResult.OK,
+                    MessageBoxOptions.DefaultDesktopOnly);
+                // 强制退出程序进程
+                Environment.Exit(0);
             }
-            MessageBox.Show(
-                estd,
-                "MHYLAUNCHER_GO V2",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error,
-                MessageBoxResult.OK,
-                MessageBoxOptions.DefaultDesktopOnly);
-            // 强制退出程序进程
-            Environment.Exit(0);
         }
     }
 }
