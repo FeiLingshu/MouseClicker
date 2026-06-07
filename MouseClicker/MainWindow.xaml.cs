@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -65,6 +66,21 @@ namespace MouseClicker
             this.Button.MouseLeftButtonUp += Button_MouseLeftButtonUp;
             this.ContentRendered += (s, e) =>
             {
+                using (Process p = Process.GetCurrentProcess())
+                {
+                    string path = Path.GetDirectoryName(p.MainModule.FileName);
+                    string name = Path.GetFileNameWithoutExtension(p.MainModule.FileName);
+                    if (File.Exists($"{path}\\{name}.VK"))
+                    {
+                        string key = File.ReadAllText($"{path}\\{name}.VK");
+                        if (MouseClicker.VK_KEY.KEYS.TryGetValue(key, out int value))
+                        {
+                            VK_KEY = value;
+                            VK_NAME = key.Replace("VK_", string.Empty);
+                            ButtonSTD.Text = $"开始点击（Alt+{VK_NAME}）";
+                        }
+                    }
+                }
                 T = new Thread(Run) { IsBackground = true };
                 T.Start();
                 this.HOOKPROC = Win32CallBack;
@@ -203,6 +219,10 @@ namespace MouseClicker
 
         private HOOKPROC HOOKPROC;
 
+        private int VK_KEY = VK_F1;
+
+        private string VK_NAME = "F1";
+
         private int Win32CallBack(int nCode, int wParam, IntPtr lParam)
         {
             try
@@ -228,7 +248,7 @@ namespace MouseClicker
                 }
                 if (wParam == WM_SYSKEYDOWN)
                 {
-                    if (keyBoardHookStruct.vkCode == VK_F1 && (keyBoardHookStruct.flags & LLKHF_ALTDOWN) != 0)
+                    if (keyBoardHookStruct.vkCode == VK_KEY && (keyBoardHookStruct.flags & LLKHF_ALTDOWN) != 0)
                     {
                         Dispatcher.Invoke(() =>
                         {
@@ -679,7 +699,7 @@ namespace MouseClicker
                 {
                     ReadSet(false);
                     Is_Running = true;
-                    this.ButtonSTD.Text = "停止点击（Alt+F1）";
+                    this.ButtonSTD.Text = $"停止点击（Alt+{VK_NAME}）";
                     MainArea.IsHitTestVisible = false;
                     RunSign.Set();
                 }
@@ -688,7 +708,7 @@ namespace MouseClicker
 
         private void ElementSet()
         {
-            this.ButtonSTD.Text = "开始点击（Alt+F1）";
+            this.ButtonSTD.Text = $"开始点击（Alt+{VK_NAME}）";
             MainArea.IsHitTestVisible = true;
         }
     }
