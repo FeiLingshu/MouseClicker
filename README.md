@@ -51,6 +51,7 @@
 - __在文件内输入按键名称__
     - __具体文件结构见：[link...](./MouseClicker/bin/Release)，部分文件为编译生成文件，仅参考与程序本体之间的位置关系即可__
     - __按键名称表见：[link...](./MouseClicker/VK_KEY.cs)，注意要输入的是VK开头的按键名称，而不是后面的数值__
+        - __目前仅支持部分按键 `0~9` `A~Z` `F1~F12`（包含数字小键盘）__
     - __示例文件见：[link...](./MouseClicker/bin/Release/MouseClicker.VK)，默认值为F1键__
 
 > [!NOTE]
