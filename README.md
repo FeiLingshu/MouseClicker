@@ -40,6 +40,21 @@
 |__![PopupImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/Popup.png)__|__选项在窗口标题栏右键菜单中可见！！！__<br/>__-\> 可配置是否保存窗口位置__<br/>__-\> 可配置是否保存用户设置__|
 |:--------:|:----------------|
 
+<a id="hotkey">
+
+- __程序现已支持调整快捷键__
+
+> [!CAUTION]
+> __由于程序并非使用Windows快捷键API进行按键响应，而是使用全局键盘钩子，故不能提供实时快捷键修改的功能（为了防止钩子处理程序出现异常导致链表阻塞），但程序提供加载前指定快捷键的功能，具体操作方式如下__
+
+- __在程序所在目录创建「与程序同名」且「扩展名为 `.VK`」的文件__
+- __在文件内输入按键名称__
+    - __具体文件结构见：[link...](./MouseClicker/bin/Release)，部分文件为编译生成文件，仅参考与程序本体之间的位置关系即可__
+    - __按键名称表见：[link...](./MouseClicker/VK_KEY.cs)，注意要输入的是VK开头的按键名称，而不是后面的数值__
+    - __示例文件见：[link...](./MouseClicker/bin/Release/MouseClicker.VK)，默认值为F1键__
+
+</a>
+
 > [!NOTE]
 > __程序需要 [`.Net Framework 4.8`](https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/net48) 运行环境__
 > - __如需自行编译，请下载「 生成应用 - 开发包 」列下的内容__
