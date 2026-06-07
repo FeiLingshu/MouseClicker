@@ -40,7 +40,7 @@
 |__![PopupImg](https://raw.githubusercontent.com/FeiLingshu/MouseClicker/refs/heads/main/Popup.png)__|__选项在窗口标题栏右键菜单中可见！！！__<br/>__-\> 可配置是否保存窗口位置__<br/>__-\> 可配置是否保存用户设置__|
 |:--------:|:----------------|
 
-<a id="hotkey">
+<a id="hotkey"></a>
 
 - __程序现已支持调整快捷键__
 
@@ -52,8 +52,6 @@
     - __具体文件结构见：[link...](./MouseClicker/bin/Release)，部分文件为编译生成文件，仅参考与程序本体之间的位置关系即可__
     - __按键名称表见：[link...](./MouseClicker/VK_KEY.cs)，注意要输入的是VK开头的按键名称，而不是后面的数值__
     - __示例文件见：[link...](./MouseClicker/bin/Release/MouseClicker.VK)，默认值为F1键__
-
-</a>
 
 > [!NOTE]
 > __程序需要 [`.Net Framework 4.8`](https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/net48) 运行环境__
